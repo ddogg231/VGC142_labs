@@ -6,12 +6,12 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class topdownplayercontroller : MonoBehaviour
 {
-
+    GameObject model;
     public float moveSpeed = 10.0f;
     public float jumpSpeed = 500.0f;
 
     Rigidbody rb;
-
+    Animator anim;
     Vector3 curMoveInput;
     Vector3 moveDir;
 
@@ -21,9 +21,10 @@ public class topdownplayercontroller : MonoBehaviour
     public float groundCheckRadius;
     public Transform groundCheck;
     public bool isGrounded;
+    public float lookThreshole = 0.6f;
 
     int errorCounter = 0;
-    public float range;
+    
 
 
     // Start is called before the first frame update
@@ -37,8 +38,10 @@ public class topdownplayercontroller : MonoBehaviour
 
         try
         {
-             
+            model = GameObject.FindGameObjectWithTag("PlayerModel");
             rb = GetComponent<Rigidbody>();
+            anim = model.GetComponent<Animator>();
+
             if (!isGrounded) throw new UnassignedReferenceException("moveSpeed not set" + name);
             if (!rb) throw new UnassignedReferenceException("Rigidbody not set on " + name);
             if (!groundCheck) throw new UnassignedReferenceException("Groundcheck not set on " + name);
@@ -64,7 +67,7 @@ public class topdownplayercontroller : MonoBehaviour
 
     private void Fire(InputAction.CallbackContext ctx)
     {
-
+    
     }
 
     private void Jump(InputAction.CallbackContext ctx)
@@ -81,6 +84,41 @@ public class topdownplayercontroller : MonoBehaviour
 
         curMoveInput.y = rb.velocity.y;
         rb.velocity = curMoveInput;
+
+        if (Mathf.Abs(moveDir.magnitude) > 0)
+        {
+            float dotProduct = Vector3.Dot(moveDir, transform.forward);
+
+            if (dotProduct > -lookThreshole && dotProduct < lookThreshole)
+            {
+                float horizontalDotProduct = Vector3.Dot(Vector3.left, moveDir);
+                float hValue;
+                if (horizontalDotProduct < 0)
+                    hValue = -1;
+                else
+                    hValue = 1;
+
+                anim.SetFloat("horizontal", hValue);
+                anim.SetFloat("vertical", 0);
+
+            }
+
+            if (dotProduct >= lookThreshole)
+            {
+                anim.SetFloat("horizontal", 0);
+                anim.SetFloat("vertical", 1);
+            }
+            if (dotProduct >= lookThreshole)
+            {
+                anim.SetFloat("horizontal", 0);
+                anim.SetFloat("vertical", 1);
+            }
+        }
+        else
+        {
+            anim.SetFloat("horizontal", 0);
+            anim.SetFloat("vertical", 1);
+        }
 
         float distance;
         Ray mouseRay = GameManager.Instance.MousePos();
@@ -113,8 +151,5 @@ public class topdownplayercontroller : MonoBehaviour
         moveDir = new Vector3(move.x, 0, move.y).normalized;
         curMoveInput = moveDir * moveSpeed;
     }
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireSphere(transform.position, range);
-    }
+    
 }

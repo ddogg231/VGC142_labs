@@ -5,6 +5,8 @@ using UnityEngine;
 [DefaultExecutionOrder(-1)]
 public class GameManager : Singleton<GameManager>
 {
+    
+
     public GameObject player; 
     public GameObject[] spawnLocations;
 
@@ -97,3 +99,5 @@ public class GameManager : Singleton<GameManager>
         currentSpawnPoint = spawnPoint;
     }*/
 }
+
+
