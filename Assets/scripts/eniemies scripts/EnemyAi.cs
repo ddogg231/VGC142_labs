@@ -7,19 +7,16 @@ public class EnemyAi : MonoBehaviour
 {
 
     public Material[] Skin;
-
-
     public NavMeshAgent agent;
-
     public Transform player;
 
     public LayerMask WhatIsGround, WhatIsPlayer;
 
     public float health;
 
-    public Vector3 walkPoint;
+    /*public Vector3 walkPoint;
     bool walkPointSet;
-    public float walkPointRange;
+    public float walkPointRange;*/
 
     public float timeBetweenAttacks;
     bool alreadyAttacked;
@@ -29,17 +26,9 @@ public class EnemyAi : MonoBehaviour
     public bool playerInsightRange, playerInattackRange;
 
     Rigidbody rb;
-    
-    public float distanceThreshold = 5f;
-    public float invisibleTransparency = 0.5f;
-    public float fadeTime = 0.5f;
-    private float currentTransparency;
-    private float targetTransparency;
-    private float elapsedTime;
-    private bool isFading;
-    private Vector3 directionToPlayer;
 
-    
+    public CharacterController playerInstance;
+
 
     private void Awake()
     {
@@ -51,17 +40,13 @@ public class EnemyAi : MonoBehaviour
     {
         playerInsightRange = Physics.CheckSphere(transform.position, sightRange, WhatIsPlayer);
         playerInattackRange = Physics.CheckSphere(transform.position, attackRange, WhatIsPlayer);
-
-        if (!playerInsightRange && !playerInattackRange) Partoling();
-        if (playerInsightRange && !playerInattackRange) ChasePlayer();
         if (playerInsightRange && playerInattackRange) AttackPlayer();
-       
 
         
-        
+
     }
 
-    private void Partoling()
+    /*private void Partoling()
     {
         if (!walkPointSet) SearchWalkPoint();
 
@@ -90,15 +75,25 @@ public class EnemyAi : MonoBehaviour
 
     private void ChasePlayer()
     {
-        agent.SetDestination(player.position);
-    }
+        if (playerInsightRange == true)
+        {
+
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            if (distanceToPlayer <= sightRange)
+            {
+                agent.SetDestination(player.position);
+            }
+            else
+            {
+                agent.ResetPath();
+            }
+
+        }
+    }*/
 
     private void AttackPlayer()
     {
-        agent.SetDestination(transform.position);
-
-        transform.LookAt(player);
-
+        
         if (!alreadyAttacked)
         {
             rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();

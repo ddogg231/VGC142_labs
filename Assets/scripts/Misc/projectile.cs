@@ -21,15 +21,16 @@ public class projectile : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("EnemyShots") && collision.gameObject.CompareTag("Player"))
-            GameManager.Instance.lives--;
+            GameManager.Instance.health--;
 
         if (collision.gameObject.CompareTag("ground") || collision.gameObject.CompareTag("wall"))
             Destroy(gameObject);
 
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("player"))  
         {
-            GameManager.Instance.lives--;
+            GameManager.Instance.health--;
             Destroy(gameObject);
+            Debug.Log("player hit");
         }
 
         if (collision.gameObject.CompareTag("Enemy"))

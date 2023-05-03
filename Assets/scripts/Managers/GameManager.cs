@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [DefaultExecutionOrder(-1)]
 public class GameManager : Singleton<GameManager>
 {
-    
 
+    public UnityEvent<int> onLifeValueChanged;
     public GameObject player; 
     public GameObject[] spawnLocations;
 
@@ -18,8 +19,8 @@ public class GameManager : Singleton<GameManager>
 
     
 
-    public int maxLives = 5;
-    private int _lives = 3;
+    public int maxHealth = 20;
+    private int _health = 5;
     protected override void Awake()
     {
 
@@ -36,33 +37,33 @@ public class GameManager : Singleton<GameManager>
     {
         playerActions.Disable();
     }
-    public int lives
+    public int health
     {
-        get { return _lives; }
+        get { return _health; }
         set
         {
-            if (_lives > value)
+            if (_health > value)
                 Respawn();
 
-            _lives = value;
+            _health = value;
 
-            if (_lives > maxLives)
-                _lives = maxLives;
+            if (_health > maxHealth)
+                _health = maxHealth;
 
             //if (_lives < 0)
             //gameover
 
 
-            //onLifeValueChanged?.Invoke(_lives);
+            //onLifeValueChanged?.Invoke(_health);
 
-            Debug.Log("Lives have been set to: " + _lives.ToString());
+            Debug.Log("Lives have been set to: " + _health.ToString());
         }
     }
     // Start is called before the first frame update
     void Start()
     {
-       // controller = GameObject.FindGameObjectWithTag("Player").GetComponent<topdownplayercontroller>();
-        lives = maxLives;
+        // controller = GameObject.FindGameObjectWithTag("Player").GetComponent<topdownplayercontroller>();
+        health = maxHealth;
         SpawnPlayer();
     }
 
@@ -94,10 +95,10 @@ public class GameManager : Singleton<GameManager>
         return Camera.main.ScreenPointToRay(screenSpacePos);
     }
 
-    /*public void UpdateCheckpoint(Transform spawnPoint)
+  public void UpdateCheckpoint(Transform spawnPoint)
     {
         currentSpawnPoint = spawnPoint;
-    }*/
+    }
 }
 
 

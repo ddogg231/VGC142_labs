@@ -57,12 +57,6 @@ public class topdownplayercontroller : MonoBehaviour
             Debug.Log("The script ran with " + errorCounter.ToString() + " errors");
         }
 
-
-        GameManager.Instance.playerActions.Player.Move.performed += ctx => Move(ctx);
-        GameManager.Instance.playerActions.Player.Move.canceled += ctx => Move(ctx);
-
-        GameManager.Instance.playerActions.Player.Jump.performed += ctx => Jump(ctx);
-        GameManager.Instance.playerActions.Player.Fire.performed += ctx => Fire(ctx);
     }
 
     private void Fire(InputAction.CallbackContext ctx)
@@ -120,20 +114,8 @@ public class topdownplayercontroller : MonoBehaviour
             anim.SetFloat("vertical", 1);
         }
 
-        float distance;
-        Ray mouseRay = GameManager.Instance.MousePos();
-        Vector3 worldPos;
-
-        if (plane.Raycast(mouseRay, out distance))
-        {
-            worldPos = mouseRay.GetPoint(distance);
-
-            Vector3 relativePos = worldPos - transform.position;
-
-            relativePos.y = 0;
-
-            transform.rotation = Quaternion.LookRotation(relativePos);
-        }
+     
+        
     }
 
     public void Move(InputAction.CallbackContext ctx)
