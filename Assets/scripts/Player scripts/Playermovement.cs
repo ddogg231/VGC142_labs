@@ -5,19 +5,20 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Playermovement : MonoBehaviour
 {
-
     public CharacterController controller;
     GameObject model;
     public float speed = 12f;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
+
     Vector3 velocity;
     Vector3 moveDir;
 
+    public GameObject player;
     public float health;
 
     Rigidbody rb;
-    Animator anim;
+    //Animator anim;
 
     public float lookThreshole = 0.6f;
 
@@ -36,7 +37,7 @@ public class Playermovement : MonoBehaviour
         {
             model = GameObject.FindGameObjectWithTag("PlayerModel");
             rb = GetComponent<Rigidbody>();
-            anim = model.GetComponent<Animator>();
+            //anim = model.GetComponent<Animator>();
 
             if (!isGrounded) throw new UnassignedReferenceException("moveSpeed not set" + name);
             if (!rb) throw new UnassignedReferenceException("Rigidbody not set on " + name);
@@ -81,19 +82,26 @@ public class Playermovement : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
 
-       
-
-
     }
-    public void TakeDamge(int damage)
+    /*public void TakeDamge(int damage)
     {
         health -= damage;
 
         if (health <= 0) Invoke(nameof(DestroyPlayer), 0.5f);
+        Debug.Log("damage taken");
+    }*/
+
+    public virtual void TakeDamage(int damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            DestroyPlayer();
+        }
     }
 
     private void DestroyPlayer()
     {
-        Destroy(gameObject);
+        Destroy(player);
     }
 }

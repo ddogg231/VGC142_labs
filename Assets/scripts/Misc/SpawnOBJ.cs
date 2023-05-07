@@ -7,7 +7,7 @@ public class SpawnOBJ : MonoBehaviour
     public GameObject[] spawnpoint;
     void Start()
     {
-        Instantiate(spawnpoint[Random.Range(0, spawnpoint.Length)], this.transform);
+       // Instantiate(spawnpoint[Random.Range(0, spawnpoint.Length)], this.transform);
     }
 
 }

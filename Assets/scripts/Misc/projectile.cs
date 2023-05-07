@@ -23,10 +23,10 @@ public class projectile : MonoBehaviour
         if (collision.gameObject.CompareTag("EnemyShots") && collision.gameObject.CompareTag("Player"))
             GameManager.Instance.health--;
 
-        if (collision.gameObject.CompareTag("ground") || collision.gameObject.CompareTag("wall"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("wall"))
             Destroy(gameObject);
 
-        if (collision.gameObject.CompareTag("player"))  
+        if (collision.gameObject.CompareTag("Player"))  
         {
             GameManager.Instance.health--;
             Destroy(gameObject);

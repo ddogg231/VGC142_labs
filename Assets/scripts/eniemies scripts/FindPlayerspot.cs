@@ -19,17 +19,23 @@ public class FindPlayerspot : MonoBehaviour
     public LayerMask obstructionMask;
     public float maxDistance = 20f;
 
-    public GameObject Enemyskin;
-    SkinnedMeshRenderer[] SkinnedMeshRenderer;
 
-    public Material[] skin;
+
+    private Transform playerTransform;
+    public SkinnedMeshRenderer meshRenderer;
+    public Material[] materials;
+   
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(FindPlayer());
         StartCoroutine(FOVRoutine());
-        Renderer renderer = Enemyskin.GetComponent<Renderer>();
+       
+
+
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+       
     }
 
     private IEnumerator FindPlayer()
@@ -44,7 +50,7 @@ public class FindPlayerspot : MonoBehaviour
         Debug.Log($"Player instance: {GameManager.Instance.playerInstance}");
     }
 
-    // menos pesado al engine 
+    
     private IEnumerator FOVRoutine()
     {
 
@@ -64,7 +70,7 @@ public class FindPlayerspot : MonoBehaviour
 
         if (rangeChecks.Length != 0)
         {
-
+           
             Transform target = rangeChecks[0].transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
 
@@ -89,27 +95,74 @@ public class FindPlayerspot : MonoBehaviour
     {
         if (canSeePlayer == true)
         {
-            Enemyskin.GetComponent<MeshRenderer>().material = skin[1];
+            
             float distanceToPlayer = Vector3.Distance(transform.position, Player.position);
             if (distanceToPlayer <= radius)
             {
+                meshRenderer.material = materials[0];
                 enemy.SetDestination(Player.position);
             }
             else
             {
                 enemy.ResetPath();
 
-                
             }
             
                 
         }
         if (canSeePlayer == false)
         {
-            
+            meshRenderer.material = materials[1];
         }
 
     }
+    
+    /*private void Partoling()
+        {
+            if (!walkPointSet) SearchWalkPoint();
 
-   
+            if (walkPointSet)
+                agent.SetDestination(walkPoint);
+
+            Vector3 distanceToWalkPoint = transform.position - walkPoint;
+
+            if (distanceToWalkPoint.magnitude < 1f)
+                walkPointSet = false;
+        }
+
+        private void SearchWalkPoint()
+        {
+            float randomZ = Random.Range(-walkPointRange, walkPointRange);
+            float randomX = Random.Range(-walkPointRange, walkPointRange);
+
+            walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z);
+
+            if (Physics.Raycast(walkPoint, -transform.up, 2f, WhatIsGround))
+                walkPointSet = true;
+            Debug.DrawRay(walkPoint, transform.forward, Color.red);
+
+
+        }
+
+        private void ChasePlayer()
+        {
+            if (playerInsightRange == true)
+            {
+
+                float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+                if (distanceToPlayer <= sightRange)
+                {
+                    agent.SetDestination(player.position);
+                }
+                else
+                {
+                    agent.ResetPath();
+                }
+
+            }
+        }*/
+
 }
+/*public Vector3 walkPoint;
+    bool walkPointSet;
+    public float walkPointRange;*/

@@ -18,9 +18,11 @@ TagManager:
   - Wood
   - Ground
   - spawnPoint
-  - Playermodel
-  - PlayerModel
   - player
+  - Enemy
+  - wall
+  - PlayerModel
+  - EnemyShots
   layers:
   - Default
   - TransparentFX

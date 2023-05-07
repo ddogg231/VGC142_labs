@@ -62,7 +62,6 @@
     <Compile Include="Assets\scripts\Misc\shootScript.cs" />
     <Compile Include="Assets\scripts\eniemies scripts\EnemyAi.cs" />
     <Compile Include="Assets\unity-chan!\Unity-chan! Model\Scripts\SpringBone.cs" />
-    <Compile Include="Assets\scripts\Player scripts\TakeInPA.cs" />
     <Compile Include="Assets\scripts\Player scripts\topdownplayercontroller.cs" />
     <Compile Include="Assets\unity-chan!\Unity-chan! Model\Scripts\IKCtrlRightHand.cs" />
     <Compile Include="Assets\unity-chan!\Unity-chan! Model\Scripts\UnityChanControlScriptWithRgidBody.cs" />
@@ -81,6 +80,7 @@
     <Compile Include="Assets\unity-chan!\Unity-chan! Model\Scripts\IdleChanger.cs" />
     <Compile Include="Assets\unity-chan!\Unity-chan! Model\Scripts\AutoBlink.cs" />
     <Compile Include="Assets\scripts\eniemies scripts\FindPlayerspot.cs" />
+    <Compile Include="Assets\scripts\Player scripts\PlayerHitscan.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\unity-chan!\Unity-chan! Model\Art\UnityChanShader\Shader\Unitychan_chara_fuku.shader" />

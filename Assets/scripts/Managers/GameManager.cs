@@ -14,29 +14,17 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector]
     public CharacterController playerInstance = null;
     [HideInInspector] public Transform currentSpawnPoint;
-    public TakeInPA playerActions;
-    CharacterController controller;
-
     
-
     public int maxHealth = 20;
     private int _health = 5;
+
     protected override void Awake()
     {
 
         base.Awake();
-        playerActions = new TakeInPA();
+        
     }
 
-    private void OnEnable()
-    {
-        playerActions.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerActions.Disable();
-    }
     public int health
     {
         get { return _health; }
@@ -54,9 +42,9 @@ public class GameManager : Singleton<GameManager>
             //gameover
 
 
-            //onLifeValueChanged?.Invoke(_health);
+            onLifeValueChanged?.Invoke(_health);
 
-            Debug.Log("Lives have been set to: " + _health.ToString());
+            Debug.Log("Health have been set to: " + _health.ToString());
         }
     }
     // Start is called before the first frame update
@@ -66,8 +54,6 @@ public class GameManager : Singleton<GameManager>
         health = maxHealth;
         SpawnPlayer();
     }
-
-    
 
     private void SpawnPlayer()
     {
@@ -88,12 +74,12 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    public Ray MousePos()
+   /* public Ray MousePos()
     {
         Vector3 screenSpacePos = playerActions.Player.Look.ReadValue<Vector2>();
 
         return Camera.main.ScreenPointToRay(screenSpacePos);
-    }
+    }*/
 
   public void UpdateCheckpoint(Transform spawnPoint)
     {
