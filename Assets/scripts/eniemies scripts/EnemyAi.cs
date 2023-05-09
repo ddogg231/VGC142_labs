@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyAi : MonoBehaviour
 {
     public NavMeshAgent agent;
@@ -29,18 +30,41 @@ public class EnemyAi : MonoBehaviour
     public Transform spawnPoint;
 
     public UnityEvent onProjectileSpawned;
+    public Vector3 walkPoint;
+    bool walkPointSet;
+    public float walkPointRange;
+
+   // public enum EnemyState currentState = EnemyState.Partrol;
+        
+
+    public GameObject[] path;
+
+    //public EnemyState currentState = EnemyState.Partrol;
+
+    public float distThreshhold;
 
     void start()
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
 
-        rb = GetComponent<Rigidbody>();
+       
         if (projectilespeed <= 0)
             projectilespeed = 15.0f;
 
         if (!spawnPoint || !projectilePrefab)
             Debug.Log("Pease set up default values on" + gameObject.name);
+
+
+        if (path.Length <= 0) path = GameObject.FindGameObjectsWithTag("Patrol");
+       //if(currentState == EnemyState.chase)
+       //{
+       //    target = GameObject.FindGameObjectWithTag("Player").transform;
+       //    if (target) agent.SetDestination(target.position);
+       //}
+        if (distThreshhold <= 0) distThreshhold = 0.5f;
+
+    // rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -51,7 +75,7 @@ public class EnemyAi : MonoBehaviour
          if (playerInsightRange && playerInattackRange) AttackPlayer();
         
     }
-
+    
     private void AttackPlayer()
     {
         if (!alreadyAttacked)

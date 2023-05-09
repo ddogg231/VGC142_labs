@@ -14,15 +14,22 @@ public class GameManager : Singleton<GameManager>
     [HideInInspector]
     public CharacterController playerInstance = null;
     [HideInInspector] public Transform currentSpawnPoint;
-    
+    public PAactions PAactions;
+
+    PlayerAttack PlayerAttack;
+    Playermovement Playermovement;
+   // public p
+
     public int maxHealth = 20;
     private int _health = 5;
+
+    
 
     protected override void Awake()
     {
 
         base.Awake();
-        
+        PAactions = new PAactions();
     }
 
     public int health
@@ -50,9 +57,26 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
-        // controller = GameObject.FindGameObjectWithTag("Player").GetComponent<topdownplayercontroller>();
-        health = maxHealth;
         SpawnPlayer();
+        Playermovement = GameObject.FindGameObjectWithTag("Player").GetComponent<Playermovement>();
+       // PlayerAttack = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttack>();
+
+        health = maxHealth;
+        
+
+        if (!Playermovement) return;
+
+       
+    }
+
+    private void OnEnable()
+    {
+        PAactions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        PAactions.Disable();
     }
 
     private void SpawnPlayer()
@@ -74,12 +98,12 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-   /* public Ray MousePos()
-    {
-        Vector3 screenSpacePos = playerActions.Player.Look.ReadValue<Vector2>();
-
-        return Camera.main.ScreenPointToRay(screenSpacePos);
-    }*/
+   public Ray MousePos()
+   {
+       Vector3 screenSpacePos = PAactions.player.Look.ReadValue<Vector2>();
+  
+       return Camera.main.ScreenPointToRay(screenSpacePos);
+   }
 
   public void UpdateCheckpoint(Transform spawnPoint)
     {

@@ -44,7 +44,7 @@ BlendTree:
     m_DirectBlendParameter: Horzontal
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: 722892685b7c6244187caac0e69e39f8,
+    m_Motion: {fileID: -203655887218126122, guid: 6d561075d50545b468473c17af2cb352,
       type: 3}
     m_Threshold: 0.11111111
     m_Position: {x: 0, y: 1}
@@ -107,7 +107,7 @@ BlendTree:
     m_DirectBlendParameter: Horzontal
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: 722892685b7c6244187caac0e69e39f8,
+    m_Motion: {fileID: -203655887218126122, guid: 6d561075d50545b468473c17af2cb352,
       type: 3}
     m_Threshold: 0.8888889
     m_Position: {x: 0, y: -1}
@@ -143,6 +143,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: New Bool
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -167,7 +173,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -8168774093925804129}
-    m_Position: {x: 70, y: 200, z: 0}
+    m_Position: {x: 80, y: 200, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
