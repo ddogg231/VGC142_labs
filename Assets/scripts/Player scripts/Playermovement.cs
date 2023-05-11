@@ -34,7 +34,7 @@ public class Playermovement : MonoBehaviour
     bool isGrounded;
     int errorCounter = 0;
 
-
+    bool jump;
 
 
   
@@ -43,15 +43,7 @@ public class Playermovement : MonoBehaviour
     {
         //rb = GetComponent<Rigidbody>();
 
-        GameManager.Instance.PAactions.player.Move.performed += ctx => Move(ctx);
-        GameManager.Instance.PAactions.player.Move.canceled += ctx => Move(ctx);
-        GameManager.Instance.PAactions.player.Jump.performed += ctx => Jump(ctx);
-        GameManager.Instance.PAactions.player.Punch.performed += ctx => Punch(ctx);
-        GameManager.Instance.PAactions.player.Kick.performed += ctx => Kick(ctx);
-
-        GameManager.Instance.PAactions.player.Fire.performed += ctx => Fire(ctx);
-        GameManager.Instance.PAactions.player.Fire.canceled += ctx => Fire(ctx);
-
+        
         try
         {
             model = GameObject.FindGameObjectWithTag("PlayerModel");
@@ -134,7 +126,16 @@ public class Playermovement : MonoBehaviour
 
     // Update is called once per frame
   void Update()
-  {
+
+  {     GameManager.Instance.PAactions.player.Move.performed += ctx => Move(ctx);
+        GameManager.Instance.PAactions.player.Move.canceled += ctx => Move(ctx);
+        GameManager.Instance.PAactions.player.Jump.performed += ctx => Jump(ctx);
+        GameManager.Instance.PAactions.player.Punch.performed += ctx => Punch(ctx);
+        GameManager.Instance.PAactions.player.Kick.performed += ctx => Kick(ctx);
+
+        GameManager.Instance.PAactions.player.Fire.performed += ctx => Fire(ctx);
+        GameManager.Instance.PAactions.player.Fire.canceled += ctx => Fire(ctx);
+
       isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
  
       float dotProduct = Vector3.Dot(moveDir, transform.forward);
@@ -205,7 +206,7 @@ public class Playermovement : MonoBehaviour
         }
 
         Vector2 move = ctx.action.ReadValue<Vector2>();
-        move.Normalize();
+        
 
         moveDir = new Vector3(move.x, 0, move.y).normalized;
         curMoveInput = moveDir * speed;
@@ -227,14 +228,13 @@ public class Playermovement : MonoBehaviour
     {
 
     }
-  //public void Jump(InputAction.CallbackContext ctx)
-  //{
-  //    if (!isGrounded) return;
-  //
-  //    rb.AddForce(jumpHeight * Vector3.up);
-  //
-  //
-  //}
+  public void Jump(InputAction.CallbackContext ctx)
+  {
+      if (!isGrounded) return;
+  
+      rb.AddForce(jumpHeight * Vector3.up);
+       
+  }
 
    
     public virtual void TakeDamage(int damage)
