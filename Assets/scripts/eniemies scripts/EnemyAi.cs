@@ -9,11 +9,11 @@ public class EnemyAi : MonoBehaviour
 {
     public NavMeshAgent agent;
     public Transform player;
-
+    Animator animator;
     public LayerMask WhatIsGround, WhatIsPlayer;
 
     public float health;
-
+    public float maxHealth;
     public float timeBetweenAttacks;
     bool alreadyAttacked;
     public GameObject projectile;
@@ -34,39 +34,65 @@ public class EnemyAi : MonoBehaviour
     bool walkPointSet;
     public float walkPointRange;
 
-    // public enum EnemyState currentState = EnemyState.Partrol;
-
     public bool playerInSightRange, playerInAttackRange;
-    public GameObject[] path;
 
-    //public EnemyState currentState = EnemyState.Partrol;
+    public GameObject[] powerUpPrefab;
+    public GameObject[] waypoints;
+    public Transform target;
+    int waypointIndex;
+
 
     public float distThreshhold;
 
+    public EnemyState currentState = EnemyState.Patrol;
+    public bool Run;
+    public bool Dead;
 
+    private Healthbar healthBar;
+    public enum EnemyState
+    {
+        Chase, Patrol
+    }
+    int errorCounter = 0;
 
     void start()
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        Debug.Log("animator not grabed");
 
-       
+        healthBar = GetComponent<Healthbar>();
         if (projectilespeed <= 0)
             projectilespeed = 15.0f;
 
         if (!spawnPoint || !projectilePrefab)
             Debug.Log("Pease set up default values on" + gameObject.name);
 
-
-        if (path.Length <= 0) path = GameObject.FindGameObjectsWithTag("Patrol");
-       //if(currentState == EnemyState.chase)
-       //{
-       //    target = GameObject.FindGameObjectWithTag("Player").transform;
-       //    if (target) agent.SetDestination(target.position);
-       //}
         if (distThreshhold <= 0) distThreshhold = 0.5f;
 
-    // rb = GetComponent<Rigidbody>();
+        if (waypoints.Length <= 0) waypoints = GameObject.FindGameObjectsWithTag("Patrol");
+        if(currentState == EnemyState.Chase)
+        {
+            target = GameObject.FindGameObjectWithTag("Player").transform;
+            if (target) agent.SetDestination(target.position);
+        }
+        if (distThreshhold <= 0) distThreshhold = 0.5f;
+        try
+        {
+
+
+            if (!animator) throw new UnassignedReferenceException("Model not set on" + name);
+        }
+        catch (UnassignedReferenceException e)
+        {
+            Debug.Log(e.Message);
+            errorCounter++;
+        }
+        finally
+        {
+            Debug.Log("The script ran with " + errorCounter.ToString() + " errors");
+        }
     }
 
     private void Update()
@@ -74,103 +100,70 @@ public class EnemyAi : MonoBehaviour
         playerInsightRange = Physics.CheckSphere(transform.position, sightRange, WhatIsPlayer);
         playerInattackRange = Physics.CheckSphere(transform.position, attackRange, WhatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) Partoling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInsightRange && playerInattackRange) AttackPlayer();
-        
-    }
-    private void Partoling()
-    {
-        if (!walkPointSet) SearchWalkPoint();
-
-        if (walkPointSet)
-            agent.SetDestination(walkPoint);
-
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
-    }
-
-    private void SearchWalkPoint()
-    {
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, WhatIsGround))
-            walkPointSet = true;
-        Debug.DrawRay(walkPoint, transform.forward, Color.red);
-
-
-    }
-
-    private void ChasePlayer()
-    {
-         if (playerInsightRange == true)
-         {
-        
-             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-             if (distanceToPlayer <= sightRange)
-             {
-                 agent.SetDestination(player.position);
-             }
-             else
-             {
-                 agent.ResetPath();
-             }
-        
-         }
-
-        //agent.SetDestination(player.position);
-    }
-    private void AttackPlayer()
-    {
-        agent.SetDestination(transform.position);
-
-        transform.LookAt(player);
-
-        if (!alreadyAttacked)
+        if (!target) return;
+        if (currentState == EnemyState.Patrol)
         {
-            rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 12f, ForceMode.Impulse);
-            rb.AddForce(transform.up * 8f, ForceMode.Impulse);
+            Debug.DrawLine(transform.position, target.position, Color.red);
 
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
+            if (agent.remainingDistance < distThreshhold)
+            {
+                waypointIndex++;
+                waypointIndex %= waypoints.Length;
+
+                target = waypoints[waypointIndex].transform;
+                
+                
+            }
         }
-
-        onProjectileSpawned?.Invoke();
+        if (currentState == EnemyState.Chase)
+        {
+            if (!target.CompareTag("Patrol")) target = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+        if (target) agent.SetDestination(target.position);
+ 
     }
    
-    private void ResetAttack()
-    {
-        alreadyAttacked = false;
-    }
 
-   //public void TakeDamage(int damage)
-   //{
-   //    health -= damage;
-   //
-   //    if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
-   //
-   //}
 
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(float damage)
     {
         health -= damage;
+       if (healthBar != null)
+       {
+           healthBar.SetHealth(health, maxHealth);
+       }
+       
         if (health <= 0)
         {
-            Destroy(gameObject);
-
+            agent.speed = 0;
+        
+            //Destroy(gameObject);
+             Die();
         }
 
     }
-    private void DestroyEnemy()
+    public void Die()
     {
-        Destroy(gameObject);
+        // Play death animation
+       // animator.SetBool("Dead", true);
+
+        // Wait for the death animation to finish or a specific time period
+        StartCoroutine(DeathSequence());
     }
+
+    private IEnumerator DeathSequence()
+    {
+        // Wait for the duration of the death animation or a specific time period
+        yield return new WaitForSeconds(1f);
+
+        Instantiate(powerUpPrefab[Random.Range(0, powerUpPrefab.Length)], spawnPoint.transform.position, Quaternion.identity);
+        
+        yield return new WaitForSeconds(2.0f);
+
+        Destroy(gameObject);
+       // Debug.Log("Die started");
+    }
+
 
     private void OnDrawGizmosSelected()
     {
@@ -180,7 +173,3 @@ public class EnemyAi : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, sightRange);
     }
 }
-
-
-
-

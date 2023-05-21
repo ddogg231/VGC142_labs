@@ -3,46 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-//[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CharacterController), typeof(PlayerInput))]
 public class Playermovement : MonoBehaviour
 {
-    public CharacterController controller;
-    GameObject model;
-    public float speed = 12f;
+    
+    public float Playerspeed = 12f;
     public float gravity = -9.81f;
-    public float jumpHeight;
-
-    Vector3 velocity;
-    Vector3 moveDir;
-    Vector3 curMoveInput;
-
-    public GameObject player;
-    public float health;
+    public float jumpHeight = 1.0f;
+    private Vector3 Playervelocity;
+    private bool isGrounded;
+    private PlayerInput playerInput;
+    private Transform CameraTrasform;
 
     Rigidbody rb;
-    Animator anim;
+    public CharacterController controller;
+    public GameObject model;
 
-    public float lookThreshole = 0.6f;
 
+    Vector3 moveDir;
+    Vector3 curMoveInput;
     Plane plane = new Plane(Vector3.up, 0);
     public Transform groundCheck;
+
     public float groundCheckRadius = 0.4f;
     public LayerMask groundMask;
 
-    Plane Plane = new Plane(Vector3.up, 0f);
-
-    bool isGrounded;
+    public GameObject player;
+    public float health;
+    
     int errorCounter = 0;
+    //anims
+    private Animator anim;
+    int AnimX;
+    int AnimZ;
 
-    bool jump;
+    Vector2 currentAnimblendVector;
+    Vector2 animVelocity;
 
-
-  
-
-     void Start()
+    private InputAction MoveAction;
+    private InputAction JumpAction;
+   
+    void start()
     {
-        //rb = GetComponent<Rigidbody>();
+        controller = GetComponent<CharacterController>();
 
+        playerInput = GetComponent<PlayerInput>();
+        MoveAction = playerInput.actions["Move"];
+        JumpAction = playerInput.actions["Jump"];
+        CameraTrasform = Camera.main.transform;
         
         try
         {
@@ -53,7 +61,7 @@ public class Playermovement : MonoBehaviour
             if (!isGrounded) throw new UnassignedReferenceException("moveSpeed not set" + name);
             if (!rb) throw new UnassignedReferenceException("Rigidbody not set on " + name);
             if (!groundCheck) throw new UnassignedReferenceException("Groundcheck not set on " + name);
-
+            if (!anim) throw new UnassignedReferenceException("Model not set on" + name);
         }
         catch (UnassignedReferenceException e)
         {
@@ -121,72 +129,16 @@ public class Playermovement : MonoBehaviour
  //        relativePos.y = 0;
  //
  //        transform.rotation = Quaternion.LookRotation(relativePos);
- //    }
+ //    }     // float dotProduct = Vector3.Dot(moveDir, transform.forward);
+            // if (isGrounded && velocity.y < 0)
+            // {
+             //     velocity.y = -2f;
+            // }
+
  //}
 
     // Update is called once per frame
-  void Update()
-
-  {     GameManager.Instance.PAactions.player.Move.performed += ctx => Move(ctx);
-        GameManager.Instance.PAactions.player.Move.canceled += ctx => Move(ctx);
-        GameManager.Instance.PAactions.player.Jump.performed += ctx => Jump(ctx);
-        GameManager.Instance.PAactions.player.Punch.performed += ctx => Punch(ctx);
-        GameManager.Instance.PAactions.player.Kick.performed += ctx => Kick(ctx);
-
-        GameManager.Instance.PAactions.player.Fire.performed += ctx => Fire(ctx);
-        GameManager.Instance.PAactions.player.Fire.canceled += ctx => Fire(ctx);
-
-      isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
- 
-      float dotProduct = Vector3.Dot(moveDir, transform.forward);
- 
-      if (isGrounded && velocity.y < 0)
-      {
-          velocity.y = -2f;
-      }
- 
-      float x = Input.GetAxis("Horizontal");
-      float z = Input.GetAxis("Vertical");
- 
-      Vector3 move = transform.right * x + transform.forward * z;
- 
-      controller.Move(move * speed * Time.deltaTime);
- 
-     if (Input.GetButtonDown("Jump") && isGrounded)
-     {
-         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-     
-     
-     }
- 
-      velocity.y += gravity * Time.deltaTime;
- 
-      controller.Move(velocity * Time.deltaTime);
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-        float distance;
-        Ray mouseRAY = GameManager.Instance.MousePos();
-        Vector3 worldPos;
-      
-      if(plane.Raycast(mouseRAY, out distance))
-      {
-        worldPos = mouseRAY.GetPoint(distance);
-      
-        Vector3 relativePos = worldPos - transform.position;
-      
-        relativePos.y = 0;
-      
-       transform.rotation = Quaternion.LookRotation(relativePos);
-      }
-  }
+  
     public void TakeDamge(int damage)
     {
         health -= damage;
@@ -194,8 +146,6 @@ public class Playermovement : MonoBehaviour
         if (health <= 0) Invoke(nameof(DestroyPlayer), 0.5f);
         Debug.Log("damage taken");
     }
-
-
     public void Move(InputAction.CallbackContext ctx)
     {
         if (ctx.canceled)
@@ -209,11 +159,7 @@ public class Playermovement : MonoBehaviour
         
 
         moveDir = new Vector3(move.x, 0, move.y).normalized;
-        curMoveInput = moveDir * speed;
-
-       
-
-
+        curMoveInput = moveDir * Playerspeed;
     }
     public void Punch(InputAction.CallbackContext ctx)
     {
@@ -223,20 +169,17 @@ public class Playermovement : MonoBehaviour
     {
 
     }
-
     public void Fire(InputAction.CallbackContext ctx)
     {
 
     }
-  public void Jump(InputAction.CallbackContext ctx)
+    public void Jump(InputAction.CallbackContext ctx)
   {
       if (!isGrounded) return;
   
       rb.AddForce(jumpHeight * Vector3.up);
        
   }
-
-   
     public virtual void TakeDamage(int damage)
     {
         health -= damage;
@@ -245,9 +188,70 @@ public class Playermovement : MonoBehaviour
             DestroyPlayer();
         }
     }
-
     private void DestroyPlayer()
     {
         Destroy(player);
     }
+  public void Update()
+    {
+        isGrounded = controller.isGrounded;
+       if(isGrounded && Playervelocity.y < 0)
+        {
+            Playervelocity.y = 0;
+        }
+
+        Vector2 input = MoveAction.ReadValue<Vector2>();
+        Vector3 move = new Vector3(input.x, 0, input.y);
+        //move the way the camera is facing
+        move = move.x * CameraTrasform.right.normalized + move.z * CameraTrasform.forward.normalized;
+        controller.Move(move * Time.deltaTime * Playerspeed);
+        move.y = 0f;
+
+        if(JumpAction.triggered && isGrounded)
+        {
+            Playervelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravity);
+        }
+
+        Playervelocity.y += gravity * Time.deltaTime;
+        controller.Move(Playervelocity * Time.deltaTime);
+
+
+        //isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
+    // float x = Input.GetAxis("Horizontal");
+    // float z = Input.GetAxis("Vertical");
+    //
+    // Vector3 move = transform.right * x + transform.forward * z;
+    //
+    // controller.Move(move * speed * Time.deltaTime);
+    //
+    //if (Input.GetButtonDown("Jump") && isGrounded)
+    //{
+    //    velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+    //
+    //
+    //}
+    //
+    // velocity.y += gravity * Time.deltaTime;
+    //
+    // controller.Move(velocity * Time.deltaTime);
+    //
+    //
+    //
+    //   float distance;
+    //   Ray mouseRAY = GameManager.Instance.MousePos();
+    //   Vector3 worldPos;
+    // 
+    // if(plane.Raycast(mouseRAY, out distance))
+    // {
+    //   worldPos = mouseRAY.GetPoint(distance);
+    // 
+    //   Vector3 relativePos = worldPos - transform.position;
+    // 
+    //   relativePos.y = 0;
+    // 
+    //  transform.rotation = Quaternion.LookRotation(relativePos);
+    // }
+    }
 }
+
+    

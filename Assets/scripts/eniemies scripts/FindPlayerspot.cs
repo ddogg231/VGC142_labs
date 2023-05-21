@@ -21,7 +21,7 @@ public class FindPlayerspot : MonoBehaviour
 
 
 
-    private Transform playerTransform;
+    
     public SkinnedMeshRenderer meshRenderer;
     public Material[] materials;
    
@@ -34,7 +34,7 @@ public class FindPlayerspot : MonoBehaviour
        
 
 
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+       // Player = GameObject.FindGameObjectWithTag("Player").transform;
        
     }
 
@@ -47,7 +47,7 @@ public class FindPlayerspot : MonoBehaviour
 
         Debug.Log("playerRef: " + playerRef); // Debug statement
         Debug.Log("Player: " + Player); // Debug statement
-        Debug.Log($"Player instance: {GameManager.Instance.playerInstance}");
+       // Debug.Log($"Player instance: {GameManager.Instance.playerInstance}");
     }
 
     
@@ -166,3 +166,74 @@ public class FindPlayerspot : MonoBehaviour
 /*public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;*/
+/*private void ChasePlayer()
+{
+    //if (playerInsightRange == true)
+    //{
+    //
+    //    float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+    //    if (distanceToPlayer <= sightRange)
+    //    {
+    //        agent.SetDestination(player.position);
+    //    }
+    //    else
+    //    {
+    //        agent.ResetPath();
+    //    }
+    //}
+
+    if (currentState == EnemyState.Chase)
+    {
+        if (!target.CompareTag("Patrol")) target = GameObject.FindGameObjectWithTag("Player").transform;
+    }
+    if (target) agent.SetDestination(target.position);
+    Debug.Log(target);
+}*/
+// private void SearchWalkPoint()
+// {
+//     target = waypoints[waypointIndex].position;
+//     agent.SetDestination(target);
+//
+//
+//
+//     Debug.DrawRay(target, transform.forward, Color.red);
+// }
+//
+// void setWayPointIndex()
+// {
+//     waypointIndex++;
+//     if (waypointIndex >= waypoints.Length) waypointIndex = 0;
+//  
+//  
+//  //  if(waypointIndex == waypoints.Length)
+//  //  {
+//  //      waypointIndex = 0;
+//  //  }
+// }
+/*private void Partoling()2.0
+    {
+    //  if (!walkPointSet) SearchWalkPoint();
+    //
+    // if (walkPointSet)
+    //     agent.SetDestination(walkPoint);
+    //
+    // //setWayPointIndex();
+    //
+    // Vector3 distanceToWalkPoint = transform.position - walkPoint;
+    //
+    // if (distanceToWalkPoint.magnitude < 1f)
+    //     walkPointSet = false;
+
+    if (currentState == EnemyState.Patrol)
+    {
+        Debug.DrawLine(transform.position, target.position, Color.red);
+
+        if (agent.remainingDistance < distThreshhold)
+        {
+            waypointIndex++;
+            waypointIndex %= waypoints.Length;
+
+            target = waypoints[waypointIndex].transform;
+        }
+    }
+}*/

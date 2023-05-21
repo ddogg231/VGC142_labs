@@ -2,34 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 [DefaultExecutionOrder(-1)]
 public class GameManager : Singleton<GameManager>
 {
-
     public UnityEvent<int> onLifeValueChanged;
-    public GameObject player; 
+    public GameObject Player; 
     public GameObject[] spawnLocations;
-
     [HideInInspector]
     public CharacterController playerInstance = null;
     [HideInInspector] public Transform currentSpawnPoint;
-    public PAactions PAactions;
-
-    PlayerAttack PlayerAttack;
-    Playermovement Playermovement;
-   // public p
-
+    public PlayerInput playerInput;
+    Playercontroller Playercontroller;
     public int maxHealth = 20;
     private int _health = 5;
-
-    
-
     protected override void Awake()
     {
 
         base.Awake();
-        PAactions = new PAactions();
+     
     }
 
     public int health
@@ -58,32 +50,24 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         SpawnPlayer();
-        Playermovement = GameObject.FindGameObjectWithTag("Player").GetComponent<Playermovement>();
-       // PlayerAttack = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttack>();
+       
+       
 
         health = maxHealth;
         
 
-        if (!Playermovement) return;
+        if (!Playercontroller) return;
 
        
     }
 
-    private void OnEnable()
-    {
-        PAactions.Enable();
-    }
 
-    private void OnDisable()
-    {
-        PAactions.Disable();
-    }
 
     private void SpawnPlayer()
     {
         int spawn = Random.Range(0, spawnLocations.Length);
        
-        GameObject.Instantiate(player, spawnLocations[spawn].transform.position, Quaternion.identity);
+        GameObject.Instantiate(Player, spawnLocations[spawn].transform.position, Quaternion.identity);
         
     }
 
@@ -98,12 +82,12 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-   public Ray MousePos()
-   {
-       Vector3 screenSpacePos = PAactions.player.Look.ReadValue<Vector2>();
-  
-       return Camera.main.ScreenPointToRay(screenSpacePos);
-   }
+  // public Ray MousePos()
+  // {
+  //     Vector3 screenSpacePos = PAactions.player.Look.ReadValue<Vector2>();
+  //
+  //     return Camera.main.ScreenPointToRay(screenSpacePos);
+  // }
 
   public void UpdateCheckpoint(Transform spawnPoint)
     {
@@ -111,4 +95,30 @@ public class GameManager : Singleton<GameManager>
     }
 }
 
+/*public void Move(InputAction.CallbackContext ctx)
+    {
+        if (ctx.canceled)
+        {
+            curMoveInput = Vector3.zero;
+            moveDir = Vector3.zero;
+            return;
+        }
 
+        Vector2 move = ctx.action.ReadValue<Vector2>();
+        
+
+        moveDir = new Vector3(move.x, 0, move.y).normalized;
+        curMoveInput = moveDir * Playerspeed;
+    }
+    public void Punch(InputAction.CallbackContext ctx)
+    {
+        
+    }
+    public void Kick(InputAction.CallbackContext ctx)
+    {
+
+    }
+    public void Fire(InputAction.CallbackContext ctx)
+    {
+
+    }*/

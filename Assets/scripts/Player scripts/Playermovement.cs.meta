@@ -3,7 +3,14 @@ guid: e0c801cddfd2af4448a063c9d1e1e94b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - controller: {fileID: 8112629397796588572, guid: ceedf804646ef8b42bd2f859324a12da,
+      type: 3}
+  - model: {fileID: 8112629397796588546, guid: ceedf804646ef8b42bd2f859324a12da, type: 3}
+  - groundCheck: {fileID: 8112629397796588575, guid: ceedf804646ef8b42bd2f859324a12da,
+      type: 3}
+  - player: {fileID: 8112629397796588546, guid: ceedf804646ef8b42bd2f859324a12da,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

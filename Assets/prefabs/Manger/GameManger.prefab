@@ -46,7 +46,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onLifeValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8112629397796588573, guid: ceedf804646ef8b42bd2f859324a12da,
+          type: 3}
+        m_TargetAssemblyTypeName: Playermovement, Assembly-CSharp
+        m_MethodName: TakeDamage
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   player: {fileID: 8112629397796588546, guid: ceedf804646ef8b42bd2f859324a12da, type: 3}
   spawnLocations:
   - {fileID: 107431256987804486, guid: 3db3508f2d63a4749a67cf79fa6530f1, type: 3}

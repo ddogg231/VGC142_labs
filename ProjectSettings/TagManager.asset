@@ -19,10 +19,13 @@ TagManager:
   - Ground
   - spawnPoint
   - player
-  - Enemy
   - wall
   - PlayerModel
   - EnemyShots
+  - CinemachineTarget
+  - Patrol
+  - Enemy
+  - PowerUp
   layers:
   - Default
   - TransparentFX
@@ -31,7 +34,7 @@ TagManager:
   - Water
   - UI
   - player
-  - 
+  - Enemy
   - Wall
   - First Person View
   - Character

@@ -122,10 +122,10 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2886415172108394058}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef4766b00ca143e4dbe1e29baeb9f118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetime: 6
-  speed: 0
+  lifetime: 12
+  damage: 12

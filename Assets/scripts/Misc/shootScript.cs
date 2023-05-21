@@ -31,8 +31,8 @@ public class shootScript : MonoBehaviour
     public void fire()
     {
 
-            projectile curprojectile = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
-            curprojectile.speed = projectilespeed;
+           // projectile curprojectile = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
+           // curprojectile.speed = projectilespeed;
   
         onProjectileSpawned?.Invoke();
     }
