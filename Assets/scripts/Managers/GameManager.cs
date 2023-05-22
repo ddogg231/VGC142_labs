@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-1)]
 public class GameManager : Singleton<GameManager>
@@ -17,6 +18,7 @@ public class GameManager : Singleton<GameManager>
     Playercontroller Playercontroller;
     public int maxHealth = 20;
     private int _health = 5;
+    bool gameOverLoaded = false;
     protected override void Awake()
     {
 
@@ -50,15 +52,9 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         SpawnPlayer();
-       
-       
 
         health = maxHealth;
-        
-
-        if (!Playercontroller) return;
-
-       
+        if (!Playercontroller) return;  
     }
 
 
@@ -79,7 +75,12 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     void Update()
     {
+        if (_health <= 0 && !gameOverLoaded)
+        {
 
+            SceneManager.LoadScene(2);
+            gameOverLoaded = true;
+        }
     }
 
   // public Ray MousePos()

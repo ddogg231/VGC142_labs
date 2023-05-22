@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
-
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController), typeof(PlayerInput))]
 public class Playercontroller : MonoBehaviour
@@ -25,6 +25,8 @@ public class Playercontroller : MonoBehaviour
     private bool groundedPlayer;
     public Transform groundCheck;
     public LayerMask groundMask;
+
+    private UIManager UIManager;
 
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -59,6 +61,8 @@ public class Playercontroller : MonoBehaviour
     public float maxFallDamage = 100f;
 
     private float startingHeight;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -165,6 +169,7 @@ public class Playercontroller : MonoBehaviour
             TakeDamage(5);
         }
        
+        
     }
   
    public void OnFire(InputValue value)
@@ -174,20 +179,19 @@ public class Playercontroller : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Check if the collision object is the ground or any other surface that should trigger fall damage
         if (collision.gameObject.CompareTag("ground"))
         {
             
-            // Calculate the fall height
+            
             float fallHeight = startingHeight - transform.position.y;
 
-            // Check if fall height exceeds the specified threshold
+          
             if (fallHeight > fallDamageHeight)
             {
-                // Calculate the fall damage based on the fall height
+          
                 float damage = Mathf.Clamp(fallHeight * fallDamageMultiplier, 0f, maxFallDamage);
 
-                // Apply fall damage to the player's health
+              
                 TakeDamage(damage);
                 Debug.Log("collisoion with ground");
             }
@@ -198,6 +202,7 @@ public class Playercontroller : MonoBehaviour
     public virtual void TakeDamage(float _damage)
     {
         health -= _damage;
+
         if (health <= 0)
         {
             StartCoroutine(Die());
@@ -206,10 +211,12 @@ public class Playercontroller : MonoBehaviour
 
     private IEnumerator Die()
     {
+        Playerspeed = 0f;
         anim.SetBool("isDead", true);
         isDead = true;
         yield return new WaitForSeconds(5.0f);
         Destroy(gameObject);
+        SceneManager.LoadScene(2);
     }
     public void StartJumpForceChange()
     {

@@ -10,7 +10,7 @@ public class shootScript : MonoBehaviour
     public UnityEvent onProjectileSpawned;
     public float projectilespeed;
     public Transform spawnPoint;
-    
+    public float speed = 1f;
 
     public projectile projectilePrefab;
 
@@ -32,7 +32,7 @@ public class shootScript : MonoBehaviour
     {
 
            // projectile curprojectile = Instantiate(projectilePrefab, spawnPoint.position, spawnPoint.rotation);
-           // curprojectile.speed = projectilespeed;
+          //  curprojectile.speed = projectilespeed;
   
         onProjectileSpawned?.Invoke();
     }

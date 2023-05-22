@@ -29,17 +29,18 @@ public class projectile : MonoBehaviour
             Destroy(gameObject);
            // Debug.Log("ground hit");
         }
-        if (collision.gameObject.CompareTag("player"))  
+        if (collision.gameObject.CompareTag("Player"))  
         {
             collision.GetComponent<Playercontroller>().TakeDamage(damage);
-            GameManager.Instance.health--;
+            //GameManager.Instance.health--;
             Destroy(gameObject);
             Debug.Log("player hit");
         }
 
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            collision.gameObject.GetComponent<EnemyAi>().TakeDamage(1);
+            //collision.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
+            collision.gameObject.GetComponent<EnemyController>().TakeDamage(damage);
             Destroy(gameObject);
             Debug.Log("enemy hit");
         }

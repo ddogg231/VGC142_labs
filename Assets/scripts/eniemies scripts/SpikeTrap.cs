@@ -49,10 +49,15 @@ public class SpikeTrap : MonoBehaviour
     private void ApplyDamage(GameObject target)
     {
         
-        Playercontroller healthComponent = target.GetComponent<Playercontroller>();
+        Playercontroller health = target.GetComponent<Playercontroller>();
+        EnemyAi healthComponent = target.GetComponent<EnemyAi>();
         if (healthComponent != null)
         {
             healthComponent.TakeDamage(damageAmount);
+        }
+        if (health != null)
+        {
+            health.TakeDamage(damageAmount);
         }
     }
 }
