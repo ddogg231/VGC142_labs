@@ -6,9 +6,9 @@ using UnityEngine;
 public class projectile : MonoBehaviour
 {
     public float lifetime;
-    [SerializeField]
-    public float damage;
-    [HideInInspector]
+    
+    public int damage;
+    
     
     // Start is called before the first frame update
     void Start()

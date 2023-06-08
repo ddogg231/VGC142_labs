@@ -56,7 +56,9 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\scripts\eniemies scripts\codeforschoolgame.cs" />
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\Example Scene Scripts\SmoothingToggle.cs" />
+    <Compile Include="Assets\scripts\eniemies scripts\FindPlayerspot2.cs" />
     <Compile Include="Assets\scripts\Player scripts\Playercontroller.cs" />
     <Compile Include="Assets\scripts\Misc\Weapon.cs" />
     <Compile Include="Assets\imported Assets\StarterAssets\FirstPersonController\Scripts\FirstPersonController.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Assets\scripts\eniemies scripts\EnemyAi.cs" />
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\System\UnityEvents\OnMaximumHealthChanged\MaximumHealth.cs" />
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\Example Scene Scripts\Readme.cs" />
+    <Compile Include="Assets\scripts\Misc\WeaponSwap.cs" />
     <Compile Include="Assets\imported Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\imported Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\Example Scene Scripts\HideUIObjectWhenToggleOff.cs" />
@@ -108,7 +111,7 @@
     <Compile Include="Assets\scripts\eniemies scripts\FindPlayerspot.cs" />
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\System\HealthSystem.cs" />
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\System\UnityEvents\OnIsAliveChangedEvent.cs" />
-    <Compile Include="Assets\scripts\eniemies scripts\FindPlayerspot2.cs" />
+    <Compile Include="Assets\scripts\Managers\Billboard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\imported Assets\Simple Warships\Demo Scene\ReadMe.txt" />

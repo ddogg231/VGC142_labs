@@ -60,8 +60,7 @@ public class EnemyAi : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         Debug.Log("animator not grabed");
         health = maxHealth;
-        healthBar = GetComponentInChildren<Healthbar>();
-        healthBar.UpdateHealthBar(health, maxHealth);
+        
         if (projectilespeed <= 0)
             projectilespeed = 15.0f;
 

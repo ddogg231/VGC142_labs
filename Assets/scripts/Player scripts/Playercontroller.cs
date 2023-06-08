@@ -19,22 +19,34 @@ public class Playercontroller : MonoBehaviour
     [SerializeField]
     private float roatationSpeed = 9;
 
-    private CharacterController controller;
-    private PlayerInput playerInput;
+    public int maxhealth = 100;
+    public int currentHealth;
+    
+    
     private Vector3 playerVelocity;
     private bool groundedPlayer;
     public Transform groundCheck;
     public LayerMask groundMask;
 
+    private CharacterController controller;
+    private PlayerInput playerInput;
+    public Healthbar healthbar;
     private UIManager UIManager;
+    public WeaponSwap weaponSwap;
 
+    //input system 
     private InputAction moveAction;
     private InputAction jumpAction;
     private InputAction PunchAction;
     private InputAction KickAction;
     private InputAction KillAction;
-    private InputAction FireAction;
-   
+    [HideInInspector]
+    public InputAction ThrowAction;
+    [HideInInspector]
+    public InputAction FireAction;
+    [HideInInspector]
+    public InputAction pickAction;
+
     public Transform CameraTrasform;
 
     private Animator anim;
@@ -44,13 +56,22 @@ public class Playercontroller : MonoBehaviour
     Vector2 currentAnimationBlendVector;
     Vector2 animationVelocity;
     public GameObject player;
-    public float health;
-  
+    
+
+    [HideInInspector]
     public bool isJumping;
+    [HideInInspector]
     public bool isPunching;
+    [HideInInspector]
     public bool isDead;
+    [HideInInspector]
     public bool Kick;
+    //[HideInInspector]
     public bool fire;
+    [HideInInspector]
+    public bool Throw;
+    
+
     int errorCounter = 0;
 
     Coroutine jumpForceChange;
@@ -66,14 +87,20 @@ public class Playercontroller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startingHeight = transform.position.y;
+
+        currentHealth = maxhealth;
+        healthbar.SetMaxHealth(maxhealth);
+
+        
         Cursor.lockState = CursorLockMode.Locked;
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
         AnimX = Animator.StringToHash("Horizontal");
         AnimZ = Animator.StringToHash("Vertical");
-        
+        weaponSwap = GetComponentInChildren<WeaponSwap>();
+
+
         CameraTrasform = Camera.main.transform;
         moveAction = playerInput.actions["Move"];
         jumpAction = playerInput.actions["Jump"];
@@ -81,6 +108,8 @@ public class Playercontroller : MonoBehaviour
         KickAction = playerInput.actions["Kick"];
         KillAction = playerInput.actions["Kill"];
         FireAction = playerInput.actions["Fire"];
+        pickAction = playerInput.actions["pickup"];
+        ThrowAction = playerInput.actions["Throw"];
         try
         {
             
@@ -143,6 +172,8 @@ public class Playercontroller : MonoBehaviour
        Quaternion targetRotation = Quaternion.Euler(0, CameraTrasform.eulerAngles.y, 0);
        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, roatationSpeed * Time.deltaTime);
 
+        
+
         if (KickAction.triggered)
         {
             anim.SetBool("Kick", true);
@@ -167,43 +198,20 @@ public class Playercontroller : MonoBehaviour
         if (KillAction.triggered)
         {
             TakeDamage(5);
+            Debug.Log("kill buttion hit");
         }
        
         
     }
   
-   public void OnFire(InputValue value)
+
+
+    public virtual void TakeDamage(int _damage)
     {
-        fire = value.isPressed;
-    }
+        currentHealth -= _damage;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("ground"))
-        {
-            
-            
-            float fallHeight = startingHeight - transform.position.y;
-
-          
-            if (fallHeight > fallDamageHeight)
-            {
-          
-                float damage = Mathf.Clamp(fallHeight * fallDamageMultiplier, 0f, maxFallDamage);
-
-              
-                TakeDamage(damage);
-                Debug.Log("collisoion with ground");
-            }
-        }
-    }
-
-
-    public virtual void TakeDamage(float _damage)
-    {
-        health -= _damage;
-
-        if (health <= 0)
+        healthbar.SetHealth(currentHealth); 
+        if (currentHealth <= 0)
         {
             StartCoroutine(Die());
         }

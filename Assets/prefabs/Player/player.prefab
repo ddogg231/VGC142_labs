@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 56041977678424824}
   - component: {fileID: 56041977678424710}
   - component: {fileID: 56041977678424825}
+  - component: {fileID: 3355948252370734716}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -290,7 +291,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  CameraTrasform: {fileID: 0}
+  CameraTrasform: {fileID: 56041978542168465}
   model: {fileID: 866503330347063803}
   player: {fileID: 866503330347063803}
   health: 6
@@ -299,6 +300,7 @@ MonoBehaviour:
   isDead: 0
   Kick: 0
   fire: 0
+  Throw: 0
   fallDamageHeight: 10
   fallDamageMultiplier: 1
   maxFallDamage: 100
@@ -333,6 +335,23 @@ MonoBehaviour:
   m_DefaultActionMap: player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &3355948252370734716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866503330347063803}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1465d2386c48e445be9e84e2cd091b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 0}
+  BulletSpawnpoint: {fileID: 0}
+  bulletSpeed: 700
+  weaponDropForce: 0
+  weaponAttachPoint: {fileID: 0}
 --- !u!1 &1056506534377459167
 GameObject:
   m_ObjectHideFlags: 0
@@ -2720,7 +2739,8 @@ MonoBehaviour:
     type: 3}
   BulletSpawnpoint: {fileID: 1796537946}
   bulletSpeed: 2600
-  w: {fileID: 0}
+  weaponDropForce: 6
+  weaponAttachPoint: {fileID: 56041978542168465}
 --- !u!4 &56041978139729268 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 449102, guid: 3c81b162a1af44348b8994f7040514d4,

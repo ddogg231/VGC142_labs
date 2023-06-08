@@ -63,7 +63,7 @@ public class GameManager : Singleton<GameManager>
     {
         int spawn = Random.Range(0, spawnLocations.Length);
        
-        GameObject.Instantiate(Player, spawnLocations[spawn].transform.position, Quaternion.identity);
+        //GameObject.Instantiate(Player, spawnLocations[spawn].transform.position, Quaternion.identity);
         
     }
 

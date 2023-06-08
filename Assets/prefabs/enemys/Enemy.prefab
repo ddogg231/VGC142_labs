@@ -191,9 +191,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 665355269}
-  target: {fileID: 4706633815988666203}
-  Camera: {fileID: 0}
-  offset: {x: 0, y: 1, z: 0}
 --- !u!1 &665355267
 GameObject:
   m_ObjectHideFlags: 0
@@ -1715,9 +1712,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 0}
-  target: {fileID: 4706633815988666203}
-  Camera: {fileID: 0}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!136 &5760369371082324661
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1759,7 +1753,7 @@ MonoBehaviour:
   maxDistance: 20
   meshRenderer: {fileID: 2484088995852595296}
   materials:
-  - {fileID: 2100000, guid: 196c1541e09405d459b03e13a0df83d7, type: 2}
+  - {fileID: -4565884009001823619, guid: c0372d5974b138d45a3a787581510df7, type: 3}
   - {fileID: -4565884009001823619, guid: c0372d5974b138d45a3a787581510df7, type: 3}
 --- !u!114 &1271440762
 MonoBehaviour:
@@ -1781,12 +1775,14 @@ MonoBehaviour:
   health: 6
   maxHealth: 12
   timeBetweenAttacks: 2
-  sightRange: 12
-  attackRange: 7
+  sightRange: 24
+  attackRange: 16
   playerInSightRange: 0
   playerInAttackRange: 0
-  projectile: {fileID: 4430411606440088109, guid: cd2967f381859294db4d7c5841754be1,
+  bulletPrefab: {fileID: 4430411606440088109, guid: cd2967f381859294db4d7c5841754be1,
     type: 3}
+  BulletSpawnpoint: {fileID: 4706633814701862954}
+  bulletSpeed: 1900
   projectilespeed: 6
   powerupSpawnPoint: {fileID: 4706633814701862953}
   powerUpPrefab:

@@ -25,7 +25,7 @@ public class FindPlayerspot2 : MonoBehaviour
         StartCoroutine(FindPlayer());
         StartCoroutine(FOVRoutine());
     }
-  //code cause i forgot to show
+  
     private IEnumerator FindPlayer()
     {
         yield return new WaitForSeconds(1f); // Wait for 1 second

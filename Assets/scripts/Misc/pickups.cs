@@ -28,7 +28,7 @@ public class pickups : MonoBehaviour
               break;
 
           case Pickuptype.life:
-              collision.gameObject.GetComponent<Playercontroller>().health++;
+              collision.gameObject.GetComponent<Playercontroller>().currentHealth++;
               break;
 
           case Pickuptype.Speed:

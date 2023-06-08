@@ -26,6 +26,8 @@ TagManager:
   - Patrol
   - Enemy
   - PowerUp
+  - Weapon
+  - AttachPoint
   layers:
   - Default
   - TransparentFX
