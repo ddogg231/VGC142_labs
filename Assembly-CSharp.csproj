@@ -109,9 +109,10 @@
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\System\NoobGameDevUtilities\PrefabUtilities.cs" />
     <Compile Include="Assets\scripts\Misc\WeaponPickup.cs" />
     <Compile Include="Assets\scripts\eniemies scripts\FindPlayerspot.cs" />
+    <Compile Include="Assets\scripts\Managers\Billboard.cs" />
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\System\HealthSystem.cs" />
     <Compile Include="Assets\imported Assets\NoobGameDev\Health System For Dummies\System\UnityEvents\OnIsAliveChangedEvent.cs" />
-    <Compile Include="Assets\scripts\Managers\Billboard.cs" />
+    <Compile Include="Assets\scripts\Misc\schoolstuff2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\imported Assets\Simple Warships\Demo Scene\ReadMe.txt" />
