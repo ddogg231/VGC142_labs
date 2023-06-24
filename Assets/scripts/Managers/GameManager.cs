@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-1)]
 public class GameManager : Singleton<GameManager>
 {
+    
     public UnityEvent<int> onLifeValueChanged;
     public GameObject Player; 
     public GameObject[] spawnLocations;
@@ -23,7 +24,7 @@ public class GameManager : Singleton<GameManager>
     {
 
         base.Awake();
-     
+        
     }
 
     public int health
@@ -48,13 +49,14 @@ public class GameManager : Singleton<GameManager>
             Debug.Log("Health have been set to: " + _health.ToString());
         }
     }
+    
     // Start is called before the first frame update
     void Start()
     {
-        SpawnPlayer();
-
+        
         health = maxHealth;
         if (!Playercontroller) return;  
+        SpawnPlayer();
     }
 
 
@@ -63,7 +65,7 @@ public class GameManager : Singleton<GameManager>
     {
         int spawn = Random.Range(0, spawnLocations.Length);
        
-        //GameObject.Instantiate(Player, spawnLocations[spawn].transform.position, Quaternion.identity);
+        GameObject.Instantiate(Player, spawnLocations[spawn].transform.position, Quaternion.identity);
         
     }
 

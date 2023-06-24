@@ -28,6 +28,8 @@ TagManager:
   - PowerUp
   - Weapon
   - AttachPoint
+  - FxTemporaire
+  - Turret
   layers:
   - Default
   - TransparentFX

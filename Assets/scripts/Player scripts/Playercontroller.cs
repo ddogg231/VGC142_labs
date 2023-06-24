@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(CharacterController), typeof(PlayerInput))]
 public class Playercontroller : MonoBehaviour
 {
+    #region movement and health mods 
     [SerializeField]
     private float Playerspeed = 8f;
     [SerializeField]
@@ -21,19 +22,20 @@ public class Playercontroller : MonoBehaviour
 
     public int maxhealth = 100;
     public int currentHealth;
-    
-    
+
+    #endregion
     private Vector3 playerVelocity;
     private bool groundedPlayer;
     public Transform groundCheck;
     public LayerMask groundMask;
-
+    #region ref to other scripts
     private CharacterController controller;
     private PlayerInput playerInput;
     public Healthbar healthbar;
-    private UIManager UIManager;
-    public WeaponSwap weaponSwap;
-
+    private PlayerAttack PlayerAttack;
+    
+    #endregion
+    #region movement /actions
     //input system 
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -46,7 +48,11 @@ public class Playercontroller : MonoBehaviour
     public InputAction FireAction;
     [HideInInspector]
     public InputAction pickAction;
-
+    [HideInInspector]
+    public InputAction ScrollAction;
+    [HideInInspector]
+    public InputAction ReloadAction;
+    #endregion
     public Transform CameraTrasform;
 
     private Animator anim;
@@ -56,8 +62,8 @@ public class Playercontroller : MonoBehaviour
     Vector2 currentAnimationBlendVector;
     Vector2 animationVelocity;
     public GameObject player;
-    
 
+    #region bools
     [HideInInspector]
     public bool isJumping;
     [HideInInspector]
@@ -70,35 +76,32 @@ public class Playercontroller : MonoBehaviour
     public bool fire;
     [HideInInspector]
     public bool Throw;
-    
+    #endregion
 
     int errorCounter = 0;
 
     Coroutine jumpForceChange;
     Coroutine SpeedChange;
 
-    public float fallDamageHeight = 10f;
-    public float fallDamageMultiplier = 1f;
-    public float maxFallDamage = 100f;
-
-    private float startingHeight;
+    public int selectedWeapon = 0;
     
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        PlayerAttack = GetComponent<PlayerAttack>();
         currentHealth = maxhealth;
         healthbar.SetMaxHealth(maxhealth);
 
-        
+
         Cursor.lockState = CursorLockMode.Locked;
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
         anim = GetComponent<Animator>();
         AnimX = Animator.StringToHash("Horizontal");
         AnimZ = Animator.StringToHash("Vertical");
-        weaponSwap = GetComponentInChildren<WeaponSwap>();
+        
 
 
         CameraTrasform = Camera.main.transform;
@@ -110,6 +113,12 @@ public class Playercontroller : MonoBehaviour
         FireAction = playerInput.actions["Fire"];
         pickAction = playerInput.actions["pickup"];
         ThrowAction = playerInput.actions["Throw"];
+        ScrollAction = playerInput.actions["Scroll"];
+        ReloadAction = playerInput.actions["Reload"];
+
+
+
+
         try
         {
             
@@ -203,8 +212,44 @@ public class Playercontroller : MonoBehaviour
        
         
     }
-  
 
+    public void SelectNextWeapon()
+    {
+        selectedWeapon++;
+        if (selectedWeapon >= PlayerAttack.weapons.Count)
+        {
+            selectedWeapon = 0;
+        }
+
+        PlayerAttack.activeWeapon = PlayerAttack.weapons[selectedWeapon];
+        Debug.Log("Selected weapon: " + selectedWeapon);
+        StartWeaponChangeCooldown();
+    }
+    
+    public void SelectPreviousWeapon()
+    {
+        selectedWeapon--;
+        if (selectedWeapon < 0)
+        {
+            selectedWeapon = PlayerAttack.weapons.Count - 1;
+        }
+
+        PlayerAttack.activeWeapon = PlayerAttack.weapons[selectedWeapon];
+        Debug.Log("Selected weapon: " + selectedWeapon);
+        StartWeaponChangeCooldown();
+    }
+
+    private void StartWeaponChangeCooldown()
+    {
+       PlayerAttack.canChangeWeapon = false;
+        StartCoroutine(WeaponChangeCooldown());
+    }
+
+    private IEnumerator WeaponChangeCooldown()
+    {
+        yield return new WaitForSeconds(PlayerAttack.weaponChangeCooldown);
+        PlayerAttack.canChangeWeapon = true;
+    }
 
     public virtual void TakeDamage(int _damage)
     {

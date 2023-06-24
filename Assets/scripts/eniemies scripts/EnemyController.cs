@@ -12,11 +12,10 @@ public class EnemyController : MonoBehaviour
     Animator anim;
     public LayerMask WhatIsPlayer;
 
-    public float health;
-    public float maxHealth;
+    public int currenthealth;
+    public int maxHealth;
     public float timeBetweenAttacks;
-    bool alreadyAttacked;
-
+    public Healthbar healthbar;
     public float sightRange;
     public float attackRange;
     public bool playerInSightRange;
@@ -50,7 +49,7 @@ public class EnemyController : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
-        health = maxHealth;
+        currenthealth = maxHealth;
 
         if (projectilespeed <= 0)
             projectilespeed = 15.0f;
@@ -122,11 +121,11 @@ public class EnemyController : MonoBehaviour
         agent.speed = 0f;
     }
 
-    public virtual void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
-        health -= damage;
-
-        if (health <= 0)
+        currenthealth -= damage;
+        healthbar.SetHealth(currenthealth);
+        if (currenthealth <= 0)
         {
             Death();
             StartCoroutine(DeathSequence());
